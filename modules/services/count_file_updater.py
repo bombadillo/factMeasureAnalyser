@@ -5,7 +5,7 @@ import modules.services.count_file_loader as count_file_loader
 def update(measure_list):
     measures_count = count_file_loader.load()
     if measures_count:
-        print 'up'
+        print 'update count'
         measures_count = json.loads(measures_count)
         for measure in measure_list:
             if measure not in measures_count:

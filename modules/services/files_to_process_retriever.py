@@ -4,7 +4,6 @@ import sys
 
 def retrieve(path):
     if os.path.isdir(path):
-        print 'is dir'
         return glob.glob("{0}{1}".format(path, '*.txt'))
     elif os.path.isfile(path):
         return [path]
