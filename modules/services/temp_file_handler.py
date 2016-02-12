@@ -11,4 +11,5 @@ def create_files():
 
 def delete_files():
     directory = Config.temp_file_directory
-    shutil.rmtree(directory)
+    if os.path.exists(directory):
+        shutil.rmtree(directory)

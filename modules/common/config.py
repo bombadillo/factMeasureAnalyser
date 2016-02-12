@@ -4,4 +4,3 @@ class Config:
     temp_column_file_name = 'factMeasureColumns.txt'
     csv_file_directory = './'
     csv_file_name = 'output.csv'
-    max_line_read = 10000

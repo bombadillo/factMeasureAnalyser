@@ -1,23 +1,26 @@
-from modules.common.config import Config
-import modules.services.line_parser as line_parser
+import pandas as panda
 import modules.services.measure_file_updater as measure_file_updater
 
-max_line_read = Config.max_line_read
 fact_measure_list = []
-lines_iterated = 0
 
 def parse(file):
     print 'parsing file {0}'.format(file)
-    with open(file, 'r') as f:
-        for line in f:
-            process_line(line)
+
+    chunksize = 10 ** 6
+    for chunk in panda.read_csv(file, sep='|', chunksize=chunksize):
+        chunk.columns = ['measureCode', 'locationCode', 'timeCode', 'name', 'value']
+        for row in chunk.iterrows():
+            process_line(row[1])
+        call_measure_updater()
 
 def process_line(line):
     global max_line_read
     global fact_measure_list
     global lines_iterated
-    lines_iterated += 1
-    fact_measure_list.append(line_parser.parse(line))
-    if lines_iterated % max_line_read == 0:
-        measure_file_updater.update(fact_measure_list)
-        fact_measure_list = []
+    fact_measure_list.append(line)
+
+def call_measure_updater():
+    global fact_measure_list
+    print 'processing'
+    measure_file_updater.update(fact_measure_list)
+    fact_measure_list = []
