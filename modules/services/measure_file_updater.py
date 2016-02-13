@@ -1,14 +1,20 @@
 import modules.services.column_file_updater as column_file_updater
 import modules.services.count_file_updater as count_file_updater
 
-def update(fact_measure_list):
-    measure_list_summed = {}
-    for measure in fact_measure_list:
-        column_file_updater.update(measure['name'])
-        key = "{0}-{1}".format(measure['name'], measure['timeCode'])
-        if key not in measure_list_summed:
-            measure_list_summed[key] = measure['value']
-        else:
-            measure_list_summed[key] += measure['value']
+measure_names_encountered = ''
 
+def update(chunk):
+    global measure_names_encountered
+    measure_list_summed = {}
+    for measure in chunk.itertuples():
+        name = measure[4]
+        value = measure[5]
+        if name not in measure_names_encountered:
+            measure_names_encountered += name
+            column_file_updater.update(name)
+        key = name + '-' + str(measure[3])
+        try:
+            measure_list_summed[key] += value
+        except KeyError:
+            measure_list_summed[key] = value
     count_file_updater.update(measure_list_summed)
