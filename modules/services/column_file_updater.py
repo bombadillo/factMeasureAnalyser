@@ -8,7 +8,6 @@ def update(column):
     if not columns:
         columns = column_file_loader.load()
     if column not in columns:
-        print 'adding column {0}'.format(column)
         columns = "{0},{1}".format(columns, column)
         filePath = "{0}{1}".format(Config.temp_file_directory, Config.temp_column_file_name)
         f = open(filePath,'w')
