@@ -13,6 +13,10 @@ def update(measure_list):
                 measures_count[measure] += measure_list[measure]
         measure_list = measures_count
     filePath = "{0}{1}".format(Config.temp_file_directory, Config.temp_count_file_name)
+
+    for i in measure_list:
+        measure_list[i] = round(measure_list[i], 2)
+
     f = open(filePath,'w')
     f.write(json.dumps(measure_list))
     f.close()
