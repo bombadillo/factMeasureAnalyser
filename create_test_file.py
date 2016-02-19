@@ -1,15 +1,21 @@
-import random, string
+import random, string, calendar, time, sys
 from time import gmtime, strftime
 
-rows_to_create = 700000
+rows_to_create = 20000
 per_iteration = 500
-output_file_path = './test_measures.txt'
+timestamp = calendar.timegm(time.gmtime())
+output_file_path = './test_measures_{0}.txt'.format(timestamp)
+argument = sys.argv[1]
 
 def start():
     iteration = iter(xrange (0,rows_to_create))
     string_to_write = ''
     for i in iteration:
-        string_to_write += get_random_fact()
+        random_fact = get_random_fact()
+        random_number = random.randint(0, 20)
+        if random_number == 6 and argument == 'dups':
+            string_to_write += random_fact
+        string_to_write += random_fact
         if i % per_iteration == 0:
             write_to_file(string_to_write)
             string_to_write = ''
